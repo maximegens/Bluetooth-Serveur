@@ -12,18 +12,16 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scanner les alentours"
-        android:id="@+id/buttonScanner"
+        android:text="Lancer la recherche"
+        android:id="@+id/buttonRechercheBT"
         android:layout_centerHorizontal="true"
      />
 
-    <TextView
+    <ListView
+        android:layout_below="@+id/buttonRechercheBT"
+        android:id="@+id/listViewDevicesBT"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonScanner"
-        android:id="@+id/listBT"
-        android:layout_centerHorizontal="true"
-        />
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

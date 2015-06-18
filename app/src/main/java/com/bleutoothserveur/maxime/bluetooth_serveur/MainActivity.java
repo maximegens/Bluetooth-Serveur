@@ -14,52 +14,66 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import adapters.AdapterItemBT;
+import utils.Constantes;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private final static int REQUEST_CODE_ENABLE_BLUETOOTH = 0;
+    private final static int REQUEST_ENABLE_BT = 0;
     private BluetoothAdapter mBluetoothAdapter;
-    private Button buttonScanner;
-    private TextView listBT;
+    private List<BluetoothDevice> lesDevicesBT;
+    private ListView listViewDevicesBT;
+    private Button buttonRechercheBT;
+    private AdapterItemBT adapterBT;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        buttonScanner = (Button)findViewById(R.id.buttonScanner);
-        listBT = (TextView)findViewById(R.id.listBT);
+        buttonRechercheBT = (Button)findViewById(R.id.buttonRechercheBT);
+        listViewDevicesBT = (ListView)findViewById(R.id.listViewDevicesBT);
+        lesDevicesBT = new ArrayList<>();
+        adapterBT = new AdapterItemBT(this, lesDevicesBT);
+        listViewDevicesBT.setAdapter(adapterBT);
 
         // Vérification de la présence du Bluetooth.
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter == null) {
             Toast.makeText(getApplicationContext(),"Vous ne possédez pas le Bluetooth sur votre appareil", Toast.LENGTH_SHORT).show();
-            buttonScanner.setEnabled(false);
+            buttonRechercheBT.setEnabled(false);
         }else{
             if (!mBluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_CODE_ENABLE_BLUETOOTH);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         }
 
-        buttonScanner.setOnClickListener(new View.OnClickListener() {
+        // Clique sur le bouton de recherche.
+        buttonRechercheBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("Button","Lancement de la recherche");
+                Log.v("-------------", "Lancement de la recherche--------------------");
+                buttonRechercheBT.setText(Constantes.LIBELLE_RECHERCHE_EN_COURS);
+                lesDevicesBT.clear();
                 mBluetoothAdapter.startDiscovery();
             }
         });
-
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode != REQUEST_CODE_ENABLE_BLUETOOTH)
+        if (requestCode != REQUEST_ENABLE_BT)
             return;
         if (resultCode == RESULT_OK) {
             // L'utilisation a activé le bluetooth
@@ -69,27 +83,21 @@ public class MainActivity extends AppCompatActivity {
             IntentFilter intentFilter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
             registerReceiver(bluetoothReceiver, intentFilter);
             registerReceiver(bluetoothReceiver, filter);
-            buttonScanner.setEnabled(true);
+            buttonRechercheBT.setEnabled(true);
         } else {
             // L'utilisation n'a pas activé le bluetooth
             Toast.makeText(getApplicationContext(),"Vous devez activer le Bluetooth pour scanner les devices aux alentours.", Toast.LENGTH_SHORT).show();
-            buttonScanner.setEnabled(false);
+            buttonRechercheBT.setEnabled(false);
         }
     }
 
-    private final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.v("BroadcastReceiver", "nom : "+device.getName()+ " "+device.getAddress());
-                listBT.append(device.getName()+ " "+device.getAddress()+"\n");
-            }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-                Log.v("BroadcastReceiver","Fin de la recherche ");
-                mBluetoothAdapter.startDiscovery();
-            }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(bluetoothReceiver != null){
+            unregisterReceiver(bluetoothReceiver);
         }
-    };
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -98,12 +106,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mBluetoothAdapter.cancelDiscovery();
-        unregisterReceiver(bluetoothReceiver);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -119,4 +121,19 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private final BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
+                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                Log.v("------BroadcastReceiver", "Appareil : "+device.getName()+ " "+device.getAddress());
+                lesDevicesBT.add(device);
+                adapterBT.notifyDataSetChanged();
+            }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
+                Log.v("------BroadcastReceiver", "-- Fin de la recherche ");
+                buttonRechercheBT.setText(Constantes.LIBELLE_LANCER_RECHERCHE);
+            }
+        }
+    };
 }
