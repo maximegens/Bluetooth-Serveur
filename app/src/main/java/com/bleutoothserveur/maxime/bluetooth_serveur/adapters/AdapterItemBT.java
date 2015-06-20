@@ -1,4 +1,4 @@
-package adapters;
+package com.bleutoothserveur.maxime.bluetooth_serveur.adapters;
 
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
@@ -12,8 +12,11 @@ import com.bleutoothserveur.maxime.bluetooth_serveur.R;
 
 import java.util.List;
 
-import utils.Constantes;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
 
+/**
+ * Class adapter permettant d'afficher les données dans la listView personnalisée.
+ */
 public class AdapterItemBT extends BaseAdapter {
 
     LayoutInflater inflater;

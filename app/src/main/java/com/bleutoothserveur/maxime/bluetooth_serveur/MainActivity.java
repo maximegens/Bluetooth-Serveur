@@ -22,8 +22,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapters.AdapterItemBT;
-import utils.Constantes;
+import com.bleutoothserveur.maxime.bluetooth_serveur.adapters.AdapterItemBT;
+import com.bleutoothserveur.maxime.bluetooth_serveur.asyncTask.SendDataTask;
+import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTActionFoundAndFinishReceiver;
+import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTReceiverStateChange;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -33,35 +36,45 @@ public class MainActivity extends AppCompatActivity {
     private List<BluetoothDevice> lesDevicesBT;
     private ListView listViewDevicesBT;
     private Button buttonRechercheBT;
+    private Button buttonSendData;
     private AdapterItemBT adapterBT;
     private Switch switchActivationBT;
     private TextView stateBluetooth;
+    private BroadcastReceiver bluetoothActionFoundAndFinishReceiver;
+    private BroadcastReceiver bluetoothReceiverStateChange;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        buttonRechercheBT = (Button)findViewById(R.id.buttonRechercheBT);
-        listViewDevicesBT = (ListView)findViewById(R.id.listViewDevicesBT);
-        switchActivationBT = (Switch)findViewById(R.id.switchActivationBT);
+        buttonRechercheBT = (Button)findViewById(R.id.button_rechercheBT);
+        buttonSendData = (Button)findViewById(R.id.send_data);
+        listViewDevicesBT = (ListView)findViewById(R.id.listview_devicesBT);
+        switchActivationBT = (Switch)findViewById(R.id.switch_activationBT);
         stateBluetooth = (TextView)findViewById(R.id.state_bluetooth);
         lesDevicesBT = new ArrayList<>();
         adapterBT = new AdapterItemBT(this, lesDevicesBT);
         listViewDevicesBT.setAdapter(adapterBT);
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        bluetoothActionFoundAndFinishReceiver = new BTActionFoundAndFinishReceiver();
+        bluetoothReceiverStateChange = new BTReceiverStateChange();
+
 
         // Vérification de la présence du Bluetooth.
         if (bluetoothAdapter == null) {
             Toast.makeText(getApplicationContext(),"Vous ne possédez pas le Bluetooth sur votre appareil", Toast.LENGTH_SHORT).show();
             buttonRechercheBT.setEnabled(false);
             switchActivationBT.setChecked(false);
+            stateBluetooth.setText(Constantes.LIBELLE_BT_INEXISTANT);
         }else{
-            abonnementActivationDeactivationBT();
+            abonnementActivationDesactivationBT();
+            abonnementActionFoundAndDiscoveryFinishedBT();
             if (!bluetoothAdapter.isEnabled()) {
+                stateBluetooth.setText(Constantes.LIBELLE_BT_DESACTIVE);
                 switchActivationBT.setChecked(false);
-                activationBluetooth();
             }else{
+                stateBluetooth.setText(Constantes.LIBELLE_BT_ACTIVE);
                 switchActivationBT.setChecked(true);
             }
         }
@@ -71,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(bluetoothAdapter.isEnabled()){
-                    Log.v("-------------", "Lancement de la recherche--------------------");
                     buttonRechercheBT.setText(Constantes.LIBELLE_RECHERCHE_EN_COURS);
                     lesDevicesBT.clear();
                     bluetoothAdapter.startDiscovery();
@@ -83,18 +95,38 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Clique sur le bouton d'activation ou de désactivation du Bluetooth.
+         */
         switchActivationBT.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
+                if (isChecked) {
                     bluetoothAdapter.enable();
-                }else{
+                } else {
                     bluetoothAdapter.disable();
                 }
             }
         });
+
+        /**
+         * Clique sur le bouton d'envoi des données au serveurs.
+         */
+        buttonSendData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendDataTask sendDataTask = new SendDataTask();
+                sendDataTask.execute(v);
+            }
+        });
     }
 
+    /**
+     * Résultat de l'activité lancer lors de la demande d'activation du Bluetooth via la popup.
+     * @param requestCode Code de retour
+     * @param resultCode Résultat du choix dans la popup.
+     * @param data Les données passées en paramétres.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -111,6 +143,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Méthode onDestroy().
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -123,6 +158,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Méthode de création du menu.
+     * @param menu Le menu
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -130,7 +170,11 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
+    /**
+     * Methode appelée en fonction du choix sélectionné dans le menu.
+     * @param item le choix.
+     * @return true.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -145,63 +189,6 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    /*
-    * BroadcastReceiver surveillant la découverte de devices BT et la fin de recherche de devices BT.
-    */
-    private final BroadcastReceiver bluetoothActionFoundAndFinishReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Log.v("------BroadcastReceiver", "Appareil : "+device.getName()+ " "+device.getAddress());
-                lesDevicesBT.add(device);
-                adapterBT.notifyDataSetChanged();
-            }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-                Log.v("------BroadcastReceiver", "-- Fin de la recherche ");
-                buttonRechercheBT.setText(Constantes.LIBELLE_LANCER_RECHERCHE);
-                buttonRechercheBT.setEnabled(true);
-            }
-        }
-    };
-
-    /**
-     * BroadcastReceiver surveillant l'activation et la désactivation du Bluetooth.
-     */
-    private final BroadcastReceiver bluetoothReceiverStateChange = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            final String action = intent.getAction();
-
-            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
-                        BluetoothAdapter.ERROR);
-                switch (state) {
-                    case BluetoothAdapter.STATE_OFF:
-                        Log.v("btReceiverStateChange", "Bluetooth off");
-                        stateBluetooth.setText("Bluetooth désactivé");
-                        switchActivationBT.setChecked(false);
-                        buttonRechercheBT.setEnabled(false);
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        buttonRechercheBT.setEnabled(false);
-                        Log.v("btReceiverStateChange", "Turning Bluetooth off...");
-                        stateBluetooth.setText("Bluetooth en cours de désactivation");
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_ON:
-                        Log.v("btReceiverStateChange", "Turning Bluetooth on...");
-                        stateBluetooth.setText("Bluetooth en cours d'activation");
-                        break;
-                    case BluetoothAdapter.STATE_ON:
-                        Log.v("btReceiverStateChange", "Bluetooth on...");
-                        stateBluetooth.setText("Bluetooth activé");
-                        buttonRechercheBT.setEnabled(true);
-                        switchActivationBT.setChecked(true);
-                        break;
-                }
-            }
-        }
-    };
-
 
     /**
      * S'abonne aux évenements de découvert d'appareil Bluetooth à proximité
@@ -210,13 +197,14 @@ public class MainActivity extends AppCompatActivity {
     private void abonnementActionFoundAndDiscoveryFinishedBT(){
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
         registerReceiver(bluetoothActionFoundAndFinishReceiver, filter);
     }
 
     /**
      * S'abonne aux évenements d'activation et de désactivation du Bluetooth.
      */
-    private void abonnementActivationDeactivationBT(){
+    private void abonnementActivationDesactivationBT(){
         IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(bluetoothReceiverStateChange, filter);
     }
@@ -227,5 +215,14 @@ public class MainActivity extends AppCompatActivity {
     private void activationBluetooth(){
         Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+    }
+
+    /**
+     * Mise à jour de la liste des appareils Bluetooth détectés.
+     * @param device L'appareil Bluetooth détecté à afficher.
+     */
+    public void updateListView(BluetoothDevice device){
+         lesDevicesBT.add(device);
+         adapterBT.notifyDataSetChanged();
     }
 }

@@ -1,5 +1,4 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,51 +10,57 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_marginBottom="10dp"
-        android:background="@color/indigo_lollipop"
-        >
+        android:background="@color/indigo_lollipop">
+
         <TextView
             android:id="@+id/state_bluetooth"
-            android:textColor="@color/white"
-            android:layout_centerVertical="true"
-            android:textSize="16dp"
-            android:paddingLeft="22dp"
-            android:text="Bluetooth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Switch
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:id="@+id/switchActivationBT"
-            android:paddingRight="22dp"
+            android:paddingLeft="22dp"
+            android:text="Bluetooth"
+            android:textColor="@color/white"
+            android:textSize="16dp" />
+
+        <Switch
+            android:id="@+id/switch_activationBT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-         />
+            android:layout_centerVertical="true"
+            android:paddingRight="22dp" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/layout_state_bluetooth"
+        android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:layout_below="@id/layout_state_bluetooth">
+        android:paddingTop="@dimen/activity_vertical_margin">
 
         <Button
+            android:id="@+id/button_rechercheBT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Lancer la recherche"
-            android:id="@+id/buttonRechercheBT"
             android:layout_centerHorizontal="true"
-         />
+            android:text="Lancer la recherche" />
+
+        <Button
+            android:id="@+id/send_data"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/button_rechercheBT"
+            android:layout_centerHorizontal="true"
+            android:text="Envoyer sur le serveur" />
 
         <ListView
-            android:layout_below="@+id/buttonRechercheBT"
-            android:id="@+id/listViewDevicesBT"
+            android:id="@+id/listview_devicesBT"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/send_data" />
 
     </RelativeLayout>
 </RelativeLayout>
