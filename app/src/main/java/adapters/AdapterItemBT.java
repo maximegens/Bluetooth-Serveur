@@ -12,6 +12,8 @@ import com.bleutoothserveur.maxime.bluetooth_serveur.R;
 
 import java.util.List;
 
+import utils.Constantes;
+
 public class AdapterItemBT extends BaseAdapter {
 
     LayoutInflater inflater;
@@ -60,7 +62,9 @@ public class AdapterItemBT extends BaseAdapter {
         }
 
         if(listDevicesBT != null && listDevicesBT.get(position) != null){
-            if(listDevicesBT.get(position).getName() != null) {
+            if(listDevicesBT.get(position).getName() == null) {
+                holder.nom_bt.setText(Constantes.LIBELLE_NOM_INCONNU);
+            }else{
                 holder.nom_bt.setText("" + listDevicesBT.get(position).getName());
             }
             holder.adresse_bt.setText(listDevicesBT.get(position).getAddress());

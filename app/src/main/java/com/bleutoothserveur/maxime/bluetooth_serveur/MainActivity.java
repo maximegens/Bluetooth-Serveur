@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                         buttonRechercheBT.setEnabled(false);
                         break;
                     case BluetoothAdapter.STATE_TURNING_OFF:
+                        buttonRechercheBT.setEnabled(false);
                         Log.v("btReceiverStateChange", "Turning Bluetooth off...");
                         stateBluetooth.setText("Bluetooth en cours de désactivation");
                         break;
