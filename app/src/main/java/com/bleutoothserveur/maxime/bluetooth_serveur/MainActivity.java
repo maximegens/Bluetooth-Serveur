@@ -1,5 +1,6 @@
 package com.bleutoothserveur.maxime.bluetooth_serveur;
 
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ListView;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     private AdapterItemBT adapterBT;
     private Switch switchActivationBT;
     private TextView stateBluetooth;
+    private TextView titreAppareilFound;
     private BroadcastReceiver bluetoothActionFoundAndFinishReceiver;
     private BroadcastReceiver bluetoothReceiverStateChange;
 
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         listViewDevicesBT = (ListView)findViewById(R.id.listview_devicesBT);
         switchActivationBT = (Switch)findViewById(R.id.switch_activationBT);
         stateBluetooth = (TextView)findViewById(R.id.state_bluetooth);
+        titreAppareilFound = (TextView)findViewById(R.id.titre_list_view);
         lesDevicesBT = new ArrayList<>();
         adapterBT = new AdapterItemBT(this, lesDevicesBT);
         listViewDevicesBT.setAdapter(adapterBT);
@@ -84,10 +88,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(bluetoothAdapter.isEnabled()){
-                    buttonRechercheBT.setText(Constantes.LIBELLE_RECHERCHE_EN_COURS);
+                    buttonRechercheBT.setText(getResources().getString(R.string.recherche_en_cours));
                     lesDevicesBT.clear();
                     bluetoothAdapter.startDiscovery();
                     buttonRechercheBT.setEnabled(false);
+                    buttonRechercheBT.setBackgroundColor(getResources().getColor(R.color.material_gris_300));
                 }else{
                     activationBluetooth();
                 }
@@ -117,6 +122,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 SendDataTask sendDataTask = new SendDataTask();
                 sendDataTask.execute(v);
+            }
+        });
+
+        listViewDevicesBT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // custom dialog
+                final Dialog dialog = new Dialog(getApplicationContext());
+                dialog.setContentView(R.layout.custom_dialog_item_bt);
+                dialog.setTitle("Title...");
+                Button dialogButton = (Button) dialog.findViewById(R.id.button_dialog_item_ok);
+                // if button is clicked, close the custom dialog
+                dialogButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             }
         });
     }
@@ -224,5 +249,17 @@ public class MainActivity extends AppCompatActivity {
     public void updateListView(BluetoothDevice device){
          lesDevicesBT.add(device);
          adapterBT.notifyDataSetChanged();
+    }
+
+    /**
+     * Getters sur la liste des devices.
+     * @return La liste des devices Bluetooth.
+     */
+    public List<BluetoothDevice> getLesDevicesBT(){
+        return lesDevicesBT;
+    }
+
+    public void setLesDevicesBT(List<BluetoothDevice> list){
+        lesDevicesBT = list;
     }
 }

@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="indigo_lollipop" type="color">#3F51B5</item>
+
     <item name="white" type="color">#FFFFFF</item>
+    <item name="black" type="color">#000000</item>
+
+    <!-- Couleur Material Design-->
+    <item name="material_indigo_500" type="color">#3F51B5</item>
+    <item name="material_indigo_700" type="color">#303F9F</item>
+    <item name="material_gris_300" type="color">#E0E0E0</item>
+    <item name="material_gris_500" type="color">#9E9E9E</item>
+
+
 </resources>

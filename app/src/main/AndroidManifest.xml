@@ -22,17 +22,6 @@
             </intent-filter>
         </activity>
 
-        <receiver class=".BTReceiverStateChange"
-            android:name="com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTReceiverStateChange">
-            <intent-filter android:priority="100">
-            </intent-filter>
-        </receiver>
-
-        <receiver class=".BTActionFoundAndFinishReceiver"
-            android:name="com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTActionFoundAndFinishReceiver">
-            <intent-filter android:priority="100">
-            </intent-filter>
-        </receiver>
     </application>
 
 </manifest>

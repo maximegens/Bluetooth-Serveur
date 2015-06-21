@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/contenur_dialog_item"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="24dp"
+        >
+
+        <TextView
+            android:id="@+id/titre_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Détail de l'appareil Bluetooth"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/name_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Samsung galaxy tab 3 "
+            android:textColor="@color/material_gris_300"
+            android:layout_marginBottom="20dp"/>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/buttons_dialog_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/button_dialog_item_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OK"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

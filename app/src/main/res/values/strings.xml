@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">Bluetooth-Serveur</string>
+    <string name="app_name">Publication Bluetooth</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="recherche_en_cours">Recherche \nen cours...</string>
+    <string name="lancer_la_recherche">Lancer \nla recherche</string>
+    <string name="titre_devices_detecter">Appareils aux alentours</string>
+    <string name="titre_aucun">Aucun appareil aux alentours</string>
 </resources>
