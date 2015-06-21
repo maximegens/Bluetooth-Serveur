@@ -1,35 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/contenur_dialog_item"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp"
         >
 
         <TextView
-            android:id="@+id/titre_dialog_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Détail de l'appareil Bluetooth"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginBottom="20dp"/>
-
-        <TextView
             android:id="@+id/name_dialog_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Samsung galaxy tab 3 "
-            android:textColor="@color/material_gris_300"
+            android:text="Nom"
+            android:textColor="@color/material_gris_500"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/name_value_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            tools:text="Nom value"
             android:layout_marginBottom="20dp"/>
 
+        <TextView
+            android:id="@+id/adress_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adresse"
+            android:textColor="@color/material_gris_500"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/adress_value_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            tools:text="Adresse value"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:id="@+id/bonded_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Appareillement"
+            android:textColor="@color/material_gris_500"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/bonded_value_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            tools:text="Bonded value"
+            android:layout_marginBottom="20dp"/>
+        <TextView
+            android:id="@+id/type_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:textColor="@color/material_gris_500"
+            android:layout_marginBottom="5dp"/>
+
+        <TextView
+            android:id="@+id/type_value_dialog_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            tools:text="Type value"
+  />
 
     </LinearLayout>
 
@@ -39,9 +88,15 @@
         android:layout_height="wrap_content">
 
         <Button
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:id="@+id/button_dialog_item_ok"
             android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
             android:layout_height="wrap_content"
+            android:textColor="@color/material_teal_500"
+            style="?android:attr/borderlessButtonStyle"
             android:text="OK"/>
 
     </RelativeLayout>

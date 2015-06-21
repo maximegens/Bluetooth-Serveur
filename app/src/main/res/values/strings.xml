@@ -8,4 +8,8 @@
     <string name="lancer_la_recherche">Lancer \nla recherche</string>
     <string name="titre_devices_detecter">Appareils aux alentours</string>
     <string name="titre_aucun">Aucun appareil aux alentours</string>
+
+    <string name="detail_bluetooth">Détail de l\'appareil</string>
+
+
 </resources>

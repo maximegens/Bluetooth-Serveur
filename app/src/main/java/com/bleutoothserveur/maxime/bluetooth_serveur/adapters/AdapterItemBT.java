@@ -66,7 +66,7 @@ public class AdapterItemBT extends BaseAdapter {
 
         if(listDevicesBT != null && listDevicesBT.get(position) != null){
             if(listDevicesBT.get(position).getName() == null) {
-                holder.nom_bt.setText(Constantes.LIBELLE_NOM_INCONNU);
+                holder.nom_bt.setText(Constantes.LIBELLE_INCONNU);
             }else{
                 holder.nom_bt.setText("" + listDevicesBT.get(position).getName());
             }

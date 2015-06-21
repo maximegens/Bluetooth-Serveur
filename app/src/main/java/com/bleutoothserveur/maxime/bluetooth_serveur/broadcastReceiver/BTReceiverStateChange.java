@@ -42,6 +42,7 @@ public class BTReceiverStateChange extends BroadcastReceiver {
                     stateBluetooth.setText(Constantes.LIBELLE_BT_DESACTIVE_EN_COURS);
                     switchActivationBT.setEnabled(false);
                     buttonRechercheBT.setEnabled(false);
+                    buttonRechercheBT.setBackgroundColor(context.getResources().getColor(R.color.material_gris_300));
                     break;
                 case BluetoothAdapter.STATE_TURNING_ON:
                     Log.v("btReceiverStateChange", "Turning Bluetooth on...");
@@ -54,6 +55,7 @@ public class BTReceiverStateChange extends BroadcastReceiver {
                     buttonRechercheBT.setEnabled(true);
                     switchActivationBT.setChecked(true);
                     switchActivationBT.setEnabled(true);
+                    buttonRechercheBT.setBackground(context.getResources().getDrawable(R.drawable.primary_round));
                     break;
             }
         }

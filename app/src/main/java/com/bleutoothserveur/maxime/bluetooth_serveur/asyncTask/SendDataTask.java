@@ -35,9 +35,8 @@ public class SendDataTask extends AsyncTask<View, Integer, Void> {
 
     @Override
     protected Void doInBackground(View... v) {
-        // send(v);
+        send(v[0]);
         Log.v("---- SendDataTask", "Traitement en arriere plan en cours");
-        for(int i = 0; i<10000000;i++){}
         return null;
     }
 
@@ -62,7 +61,7 @@ public class SendDataTask extends AsyncTask<View, Integer, Void> {
         if (msg.length()>0)
         {
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://yourwebsite.com/yourPhpScript.php");
+            HttpPost httppost = new HttpPost("http://maxime.gens.pagesperso-orange.fr/index.php");
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<>(2);
                 nameValuePairs.add(new BasicNameValuePair("id", "12345"));

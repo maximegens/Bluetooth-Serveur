@@ -4,12 +4,10 @@ import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             abonnementActionFoundAndDiscoveryFinishedBT();
             if (!bluetoothAdapter.isEnabled()) {
                 stateBluetooth.setText(Constantes.LIBELLE_BT_DESACTIVE);
+                buttonRechercheBT.setBackgroundColor(getResources().getColor(R.color.material_gris_300));
                 switchActivationBT.setChecked(false);
             }else{
                 stateBluetooth.setText(Constantes.LIBELLE_BT_ACTIVE);
@@ -125,15 +124,71 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Clique un item dans la liste des devices bluetooth détectés.
+         */
         listViewDevicesBT.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // custom dialog
-                final Dialog dialog = new Dialog(getApplicationContext());
+                final Dialog dialog = new Dialog(MainActivity.this);
                 dialog.setContentView(R.layout.custom_dialog_item_bt);
-                dialog.setTitle("Title...");
-                Button dialogButton = (Button) dialog.findViewById(R.id.button_dialog_item_ok);
-                // if button is clicked, close the custom dialog
+                dialog.setTitle(getResources().getString(R.string.detail_bluetooth));
+                Button dialogButton = (Button)dialog.findViewById(R.id.button_dialog_item_ok);
+                TextView dialogNom = (TextView) dialog.findViewById(R.id.name_value_dialog_item);
+                TextView dialogAdress = (TextView) dialog.findViewById(R.id.adress_value_dialog_item);
+                TextView dialogBonded = (TextView) dialog.findViewById(R.id.bonded_value_dialog_item);
+                TextView dialogType = (TextView) dialog.findViewById(R.id.type_value_dialog_item);
+
+                BluetoothDevice device = getLesDevicesBT().get(position);
+                if(device != null){
+                    if(device.getName() == null){
+                        dialogNom.setText(Constantes.LIBELLE_INCONNU);
+                    }else{
+                        dialogNom.setText(device.getName());
+                    }
+
+                    switch (device.getBondState()){
+                        case BluetoothDevice.BOND_NONE :
+                            dialogBonded.setText("Non appareillé");
+                            break;
+                        case BluetoothDevice.BOND_BONDING :
+                            dialogBonded.setText("Appareillement en cours");
+                            break;
+                        case BluetoothDevice.BOND_BONDED :
+                            dialogBonded.setText("Appareillé");
+                            break;
+                        default:
+                            dialogBonded.setText(Constantes.LIBELLE_INCONNU);
+                            break;
+                    }
+
+                    if(android.os.Build.VERSION.SDK_INT >= 18) {
+                        switch (device.getType()){
+                            case BluetoothDevice.DEVICE_TYPE_CLASSIC :
+                                dialogType.setText("Bluetooth classique");
+                                break;
+                            case BluetoothDevice.DEVICE_TYPE_DUAL :
+                                dialogType.setText("Bluetooth classique et Low Energy");
+                                break;
+                            case BluetoothDevice.DEVICE_TYPE_LE :
+                                dialogType.setText("Bluetooth Low Energy");
+                                break;
+                            case BluetoothDevice.DEVICE_TYPE_UNKNOWN :
+                                dialogType.setText(Constantes.LIBELLE_INCONNU);
+                                break;
+                            default:
+                                dialogType.setText(Constantes.LIBELLE_INCONNU);
+                                break;
+                        }
+                    }
+                    else {
+                        dialogType.setText(Constantes.LIBELLE_NON_DISPONIVLE);
+                    }
+
+                    dialogAdress.setText(device.getAddress());
+                }
+
                 dialogButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
