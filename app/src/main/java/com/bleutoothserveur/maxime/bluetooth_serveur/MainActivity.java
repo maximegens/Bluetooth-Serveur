@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSendData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendDataTask sendDataTask = new SendDataTask();
+                SendDataTask sendDataTask = new SendDataTask(MainActivity.this);
                 sendDataTask.execute(v);
             }
         });
@@ -147,45 +147,8 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         dialogNom.setText(device.getName());
                     }
-
-                    switch (device.getBondState()){
-                        case BluetoothDevice.BOND_NONE :
-                            dialogBonded.setText("Non appareillé");
-                            break;
-                        case BluetoothDevice.BOND_BONDING :
-                            dialogBonded.setText("Appareillement en cours");
-                            break;
-                        case BluetoothDevice.BOND_BONDED :
-                            dialogBonded.setText("Appareillé");
-                            break;
-                        default:
-                            dialogBonded.setText(Constantes.LIBELLE_INCONNU);
-                            break;
-                    }
-
-                    if(android.os.Build.VERSION.SDK_INT >= 18) {
-                        switch (device.getType()){
-                            case BluetoothDevice.DEVICE_TYPE_CLASSIC :
-                                dialogType.setText("Bluetooth classique");
-                                break;
-                            case BluetoothDevice.DEVICE_TYPE_DUAL :
-                                dialogType.setText("Bluetooth classique et Low Energy");
-                                break;
-                            case BluetoothDevice.DEVICE_TYPE_LE :
-                                dialogType.setText("Bluetooth Low Energy");
-                                break;
-                            case BluetoothDevice.DEVICE_TYPE_UNKNOWN :
-                                dialogType.setText(Constantes.LIBELLE_INCONNU);
-                                break;
-                            default:
-                                dialogType.setText(Constantes.LIBELLE_INCONNU);
-                                break;
-                        }
-                    }
-                    else {
-                        dialogType.setText(Constantes.LIBELLE_NON_DISPONIVLE);
-                    }
-
+                    dialogBonded.setText(getBondStateText(device));
+                    dialogType.setText(getTypeText(device));
                     dialogAdress.setText(device.getAddress());
                 }
 
@@ -199,6 +162,49 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    /**
+     * Indique le type de Bluetooth de l'appareil.
+     * @param device Le device à vérifie.
+     * @return Le type de Bluetooth.
+     */
+    public String getTypeText(BluetoothDevice device) {
+        if(android.os.Build.VERSION.SDK_INT >= 18) {
+            switch (device.getType()){
+                case BluetoothDevice.DEVICE_TYPE_CLASSIC :
+                    return "Bluetooth classique";
+                case BluetoothDevice.DEVICE_TYPE_DUAL :
+                    return "Bluetooth classique et Low Energy";
+                case BluetoothDevice.DEVICE_TYPE_LE :
+                    return "Bluetooth Low Energy";
+                case BluetoothDevice.DEVICE_TYPE_UNKNOWN :
+                    return Constantes.LIBELLE_INCONNU;
+                default:
+                    return Constantes.LIBELLE_INCONNU;
+            }
+        }
+        else {
+            return Constantes.LIBELLE_NON_DISPONIVLE;
+        }
+    }
+
+    /**
+     * Indique l'etat de l'apparaillage du device.
+     * @param device Le device à vérifie.
+     * @return l'etat d'apparaillage.
+     */
+    public String getBondStateText(BluetoothDevice device) {
+        switch (device.getBondState()){
+            case BluetoothDevice.BOND_NONE :
+                return "Non appareillé";
+            case BluetoothDevice.BOND_BONDING :
+                return"Appareillement en cours";
+            case BluetoothDevice.BOND_BONDED :
+                return"Appareillé";
+            default:
+                return Constantes.LIBELLE_INCONNU;
+        }
     }
 
     /**
@@ -235,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
         if(bluetoothReceiverStateChange != null){
             unregisterReceiver(bluetoothReceiverStateChange);
         }
-
     }
 
     /**
@@ -317,4 +322,6 @@ public class MainActivity extends AppCompatActivity {
     public void setLesDevicesBT(List<BluetoothDevice> list){
         lesDevicesBT = list;
     }
+
+
 }
