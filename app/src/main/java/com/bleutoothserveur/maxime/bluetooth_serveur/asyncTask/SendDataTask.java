@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bleutoothserveur.maxime.bluetooth_serveur.MainActivity;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.DevicesBluetoothUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -82,7 +83,7 @@ public class SendDataTask extends AsyncTask<View, Integer, Boolean> {
         // make sure the fields are not empty
         if (list.size()>0)
         {
-            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMM yyyy HH:mm:ss", Locale.FRANCE);
+            SimpleDateFormat sdf = new SimpleDateFormat("EEEE, d MMM yyyy à HH:mm:ss", Locale.FRANCE);
             String madate = sdf.format(new Date());
 
             HttpClient httpclient = new DefaultHttpClient();
@@ -93,8 +94,8 @@ public class SendDataTask extends AsyncTask<View, Integer, Boolean> {
                 for (int i = 0; i<list.size(); i++){
                     nameValuePairs.add(new BasicNameValuePair("nom"+i, list.get(i).getName()));
                     nameValuePairs.add(new BasicNameValuePair("adress"+i, list.get(i).getAddress()));
-                    nameValuePairs.add(new BasicNameValuePair("apparaillement"+i, activity.getBondStateText(list.get(i))));
-                    nameValuePairs.add(new BasicNameValuePair("type"+i, activity.getTypeText(list.get(i))));
+                    nameValuePairs.add(new BasicNameValuePair("apparaillement"+i, DevicesBluetoothUtils.getBondStateText(list.get(i))));
+                    nameValuePairs.add(new BasicNameValuePair("type"+i, DevicesBluetoothUtils.getTypeText(list.get(i))));
                 }
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
                 HttpResponse response = httpclient.execute(httppost);
@@ -115,7 +116,6 @@ public class SendDataTask extends AsyncTask<View, Integer, Boolean> {
                 // TODO Auto-generated catch block
                 return false;
             }
-
         }
         return false;
     }

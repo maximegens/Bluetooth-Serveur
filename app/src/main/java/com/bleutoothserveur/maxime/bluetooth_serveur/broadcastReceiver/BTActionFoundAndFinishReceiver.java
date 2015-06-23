@@ -13,11 +13,6 @@ import android.widget.TextView;
 
 import com.bleutoothserveur.maxime.bluetooth_serveur.MainActivity;
 import com.bleutoothserveur.maxime.bluetooth_serveur.R;
-import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 /**
  * BroadcastReceiver surveillant la détection d'un nouvel appareil Bluetooth.

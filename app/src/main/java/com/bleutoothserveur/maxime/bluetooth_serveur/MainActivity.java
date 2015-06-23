@@ -27,6 +27,7 @@ import com.bleutoothserveur.maxime.bluetooth_serveur.asyncTask.SendDataTask;
 import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTActionFoundAndFinishReceiver;
 import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTReceiverStateChange;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.DevicesBluetoothUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,13 +35,8 @@ public class MainActivity extends AppCompatActivity {
     private final static int REQUEST_ENABLE_BT = 0;
     private BluetoothAdapter bluetoothAdapter;
     private List<BluetoothDevice> lesDevicesBT;
-    private ListView listViewDevicesBT;
     private Button buttonRechercheBT;
-    private Button buttonSendData;
     private AdapterItemBT adapterBT;
-    private Switch switchActivationBT;
-    private TextView stateBluetooth;
-    private TextView titreAppareilFound;
     private BroadcastReceiver bluetoothActionFoundAndFinishReceiver;
     private BroadcastReceiver bluetoothReceiverStateChange;
 
@@ -48,12 +44,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button buttonSendData = (Button)findViewById(R.id.send_data);
+        ListView listViewDevicesBT = (ListView)findViewById(R.id.listview_devicesBT);
+        Switch switchActivationBT = (Switch)findViewById(R.id.switch_activationBT);
+        TextView stateBluetooth = (TextView)findViewById(R.id.state_bluetooth);
         buttonRechercheBT = (Button)findViewById(R.id.button_rechercheBT);
-        buttonSendData = (Button)findViewById(R.id.send_data);
-        listViewDevicesBT = (ListView)findViewById(R.id.listview_devicesBT);
-        switchActivationBT = (Switch)findViewById(R.id.switch_activationBT);
-        stateBluetooth = (TextView)findViewById(R.id.state_bluetooth);
-        titreAppareilFound = (TextView)findViewById(R.id.titre_list_view);
         lesDevicesBT = new ArrayList<>();
         adapterBT = new AdapterItemBT(this, lesDevicesBT);
         listViewDevicesBT.setAdapter(adapterBT);
@@ -61,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothActionFoundAndFinishReceiver = new BTActionFoundAndFinishReceiver();
         bluetoothReceiverStateChange = new BTReceiverStateChange();
-
 
         // Vérification de la présence du Bluetooth.
         if (bluetoothAdapter == null) {
@@ -147,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         dialogNom.setText(device.getName());
                     }
-                    dialogBonded.setText(getBondStateText(device));
-                    dialogType.setText(getTypeText(device));
+                    dialogBonded.setText(DevicesBluetoothUtils.getBondStateText(device));
+                    dialogType.setText(DevicesBluetoothUtils.getTypeText(device));
                     dialogAdress.setText(device.getAddress());
                 }
 
@@ -164,48 +158,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Indique le type de Bluetooth de l'appareil.
-     * @param device Le device à vérifie.
-     * @return Le type de Bluetooth.
-     */
-    public String getTypeText(BluetoothDevice device) {
-        if(android.os.Build.VERSION.SDK_INT >= 18) {
-            switch (device.getType()){
-                case BluetoothDevice.DEVICE_TYPE_CLASSIC :
-                    return "Bluetooth classique";
-                case BluetoothDevice.DEVICE_TYPE_DUAL :
-                    return "Bluetooth classique et Low Energy";
-                case BluetoothDevice.DEVICE_TYPE_LE :
-                    return "Bluetooth Low Energy";
-                case BluetoothDevice.DEVICE_TYPE_UNKNOWN :
-                    return Constantes.LIBELLE_INCONNU;
-                default:
-                    return Constantes.LIBELLE_INCONNU;
-            }
-        }
-        else {
-            return Constantes.LIBELLE_NON_DISPONIVLE;
-        }
-    }
-
-    /**
-     * Indique l'etat de l'apparaillage du device.
-     * @param device Le device à vérifie.
-     * @return l'etat d'apparaillage.
-     */
-    public String getBondStateText(BluetoothDevice device) {
-        switch (device.getBondState()){
-            case BluetoothDevice.BOND_NONE :
-                return "Non appareillé";
-            case BluetoothDevice.BOND_BONDING :
-                return"Appareillement en cours";
-            case BluetoothDevice.BOND_BONDED :
-                return"Appareillé";
-            default:
-                return Constantes.LIBELLE_INCONNU;
-        }
-    }
 
     /**
      * Résultat de l'activité lancer lors de la demande d'activation du Bluetooth via la popup.
@@ -318,10 +270,4 @@ public class MainActivity extends AppCompatActivity {
     public List<BluetoothDevice> getLesDevicesBT(){
         return lesDevicesBT;
     }
-
-    public void setLesDevicesBT(List<BluetoothDevice> list){
-        lesDevicesBT = list;
-    }
-
-
 }
