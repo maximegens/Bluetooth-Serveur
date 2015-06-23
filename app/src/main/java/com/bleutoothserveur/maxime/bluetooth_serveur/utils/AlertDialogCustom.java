@@ -49,4 +49,8 @@ public class AlertDialogCustom {
                 );
         alertDialog.create().show();
     }
+
+    public void showItemDescription(){
+
+    }
 }

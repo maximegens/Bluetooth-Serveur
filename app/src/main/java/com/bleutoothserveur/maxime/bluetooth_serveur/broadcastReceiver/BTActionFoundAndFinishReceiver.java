@@ -30,10 +30,8 @@ public class BTActionFoundAndFinishReceiver extends BroadcastReceiver {
         Button buttonRechercheBT = (Button) activity.findViewById(R.id.button_rechercheBT);
         if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            Log.v("------BroadcastReceiver", "Appareil : " + device.getName() + " " + device.getAddress());
             activity.updateListView(device);
         }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
-            Log.v("------BroadcastReceiver", "-- Fin de la recherche ");
             progressRecherche.setVisibility(View.VISIBLE);
             buttonRechercheBT.setText(context.getResources().getString(R.string.lancer_la_recherche));
             buttonRechercheBT.setBackground(context.getResources().getDrawable(R.drawable.primary_round));
@@ -43,7 +41,6 @@ public class BTActionFoundAndFinishReceiver extends BroadcastReceiver {
                 titreAucunFound.setVisibility(View.VISIBLE);
             }
         }else if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){
-            Log.v("-------------", "Lancement de la recherche--------------------");
             titreAppareilFound.setVisibility(View.VISIBLE);
             titreAucunFound.setVisibility(View.GONE);
             progressRecherche.setVisibility(View.VISIBLE);

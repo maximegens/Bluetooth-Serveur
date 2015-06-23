@@ -1,16 +1,12 @@
 <resources>
     <string name="app_name">Publication Bluetooth</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
     <string name="webpage_serveur">Voir le site du serveur web</string>
-
-    <string name="recherche_en_cours">Recherche \nen cours...</string>
+    <string name="recherche_en_cours">Recherche \nen cours&#8230;</string>
     <string name="lancer_la_recherche">Lancer \nla recherche</string>
     <string name="titre_devices_detecter">Appareils aux alentours</string>
     <string name="titre_aucun">Aucun appareil aux alentours</string>
-
     <string name="detail_bluetooth">Détail de l\'appareil</string>
-
+    <string name="envoie_en_cours">Envoie en cours</string>
 
 </resources>
