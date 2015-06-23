@@ -10,4 +10,8 @@ public class Constantes {
     public static final String LIBELLE_BT_INEXISTANT = "Bluetooth inexistant";
     public static final String LIBELLE_BT_ACTIVE_EN_COURS = "Activation en cours";
     public static final String LIBELLE_BT_DESACTIVE_EN_COURS = "Désactivation en cours";
+    public static final String CONNEXION_REQUIRED = "Vous n'etes pas connecté à Internet";
+
+    public static final String URL_SERVEUR = "http://maximegens.alwaysdata.net/serveur.php";
+
 }

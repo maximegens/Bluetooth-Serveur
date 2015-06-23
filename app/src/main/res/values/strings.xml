@@ -3,6 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="webpage_serveur">Voir le site du serveur web</string>
 
     <string name="recherche_en_cours">Recherche \nen cours...</string>
     <string name="lancer_la_recherche">Lancer \nla recherche</string>

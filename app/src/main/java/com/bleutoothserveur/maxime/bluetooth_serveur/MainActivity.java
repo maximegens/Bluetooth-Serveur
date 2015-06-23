@@ -1,11 +1,14 @@
 package com.bleutoothserveur.maxime.bluetooth_serveur;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -26,6 +29,7 @@ import com.bleutoothserveur.maxime.bluetooth_serveur.adapters.AdapterItemBT;
 import com.bleutoothserveur.maxime.bluetooth_serveur.asyncTask.SendDataTask;
 import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTActionFoundAndFinishReceiver;
 import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTReceiverStateChange;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.AlertDialogCustom;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.DevicesBluetoothUtils;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.InternetUtils;
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                     SendDataTask sendDataTask = new SendDataTask(MainActivity.this);
                     sendDataTask.execute(v);
                 }else{
-                    Toast.makeText(getApplicationContext(),"Vous n'etes pas connecté à Internet",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),Constantes.CONNEXION_REQUIRED,Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -222,13 +226,13 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        AlertDialogCustom alert = new AlertDialogCustom(this);
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.webpage_serveur) {
+            alert.showWebSite();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -275,4 +279,5 @@ public class MainActivity extends AppCompatActivity {
     public List<BluetoothDevice> getLesDevicesBT(){
         return lesDevicesBT;
     }
+
 }

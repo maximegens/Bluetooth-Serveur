@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bleutoothserveur.maxime.bluetooth_serveur.MainActivity;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.DevicesBluetoothUtils;
 
 import org.apache.http.HttpEntity;
@@ -87,7 +88,7 @@ public class SendDataTask extends AsyncTask<View, Integer, Boolean> {
             String madate = sdf.format(new Date());
 
             HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httppost = new HttpPost("http://maximegens.alwaysdata.net/serveur.php");
+            HttpPost httppost = new HttpPost(Constantes.URL_SERVEUR);
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<>();
                 nameValuePairs.add(new BasicNameValuePair("date", madate));
