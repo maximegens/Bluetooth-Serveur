@@ -28,6 +28,7 @@ import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTActionF
 import com.bleutoothserveur.maxime.bluetooth_serveur.broadcastReceiver.BTReceiverStateChange;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.DevicesBluetoothUtils;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.InternetUtils;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -113,8 +114,12 @@ public class MainActivity extends AppCompatActivity {
         buttonSendData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SendDataTask sendDataTask = new SendDataTask(MainActivity.this);
-                sendDataTask.execute(v);
+                if(InternetUtils.isConnected(getApplication())){
+                    SendDataTask sendDataTask = new SendDataTask(MainActivity.this);
+                    sendDataTask.execute(v);
+                }else{
+                    Toast.makeText(getApplicationContext(),"Vous n'etes pas connecté à Internet",Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
