@@ -213,19 +213,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        if(bluetoothActionFoundAndFinishReceiver != null && !activatePopup){
-            unregisterReceiver(bluetoothActionFoundAndFinishReceiver);
-            bluetoothActionFoundAndFinishReceiver = null;
-        }
-        if(bluetoothReceiverStateChange != null && !activatePopup){
-            unregisterReceiver(bluetoothReceiverStateChange);
-            bluetoothReceiverStateChange = null;
-        }
-    }
-
-    @Override
     protected void onResume(){
         super.onResume();
         if(bluetoothActionFoundAndFinishReceiver == null && actif){
