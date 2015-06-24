@@ -13,6 +13,7 @@ import com.bleutoothserveur.maxime.bluetooth_serveur.MainActivity;
 import com.bleutoothserveur.maxime.bluetooth_serveur.R;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.Constantes;
 import com.bleutoothserveur.maxime.bluetooth_serveur.utils.BluetoothUtils;
+import com.bleutoothserveur.maxime.bluetooth_serveur.utils.InternetUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -111,6 +112,7 @@ public class SendDataTask extends AsyncTask<View, Integer, Boolean> {
             try {
                 List<NameValuePair> nameValuePairs = new ArrayList<>();
                 nameValuePairs.add(new BasicNameValuePair("date", madate));
+                nameValuePairs.add(new BasicNameValuePair("adressMac", InternetUtils.getMacAddress(mContext)));
                 for (int i = 0; i<list.size(); i++){
                     nameValuePairs.add(new BasicNameValuePair("nom"+i, list.get(i).getName()));
                     nameValuePairs.add(new BasicNameValuePair("adress"+i, list.get(i).getAddress()));
