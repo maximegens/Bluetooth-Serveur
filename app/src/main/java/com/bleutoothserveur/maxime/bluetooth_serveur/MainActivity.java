@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -56,6 +57,12 @@ public class MainActivity extends AppCompatActivity {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothActionFoundAndFinishReceiver = new BTActionFoundAndFinishReceiver();
         bluetoothReceiverStateChange = new BTReceiverStateChange();
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(Constantes.KEY_SAVEINSTANCE_LISTE_BT)) {
+            lesDevicesBT = savedInstanceState.getParcelableArrayList(Constantes.KEY_SAVEINSTANCE_LISTE_BT);
+            listViewDevicesBT.setVisibility(View.VISIBLE);
+            adapterBT.notifyDataSetChanged();
+        }
 
         // Vérification de la présence du Bluetooth.
         if (bluetoothAdapter == null) {
@@ -153,6 +160,12 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(Constantes.KEY_SAVEINSTANCE_LISTE_BT, (ArrayList<? extends Parcelable>) lesDevicesBT);
+        super.onSaveInstanceState(outState);
     }
 
     /**

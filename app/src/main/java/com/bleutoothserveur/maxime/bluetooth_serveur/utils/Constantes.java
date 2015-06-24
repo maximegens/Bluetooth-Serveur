@@ -12,5 +12,6 @@ public class Constantes {
     public static final String LIBELLE_BT_DESACTIVE_EN_COURS = "Désactivation en cours";
     public static final String CONNEXION_REQUIRED = "Vous n'etes pas connecté à Internet";
     public static final String URL_SERVEUR = "http://maximegens.alwaysdata.net/serveur.php";
+    public static final String KEY_SAVEINSTANCE_LISTE_BT = "keylistDevicesBT";
 
 }
