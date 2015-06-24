@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver bluetoothActionFoundAndFinishReceiver;
     private BroadcastReceiver bluetoothReceiverStateChange;
     private boolean actif = false;
+    private boolean activatePopup = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +62,11 @@ public class MainActivity extends AppCompatActivity {
         bluetoothReceiverStateChange = new BTReceiverStateChange();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(Constantes.KEY_SAVEINSTANCE_LISTE_BT)) {
-            findViewById(R.id.titre_list_view).setVisibility(View.VISIBLE);
             lesDevicesBT = savedInstanceState.getParcelableArrayList(Constantes.KEY_SAVEINSTANCE_LISTE_BT);
-            adapterBT.swapItems(lesDevicesBT);
+            if(!lesDevicesBT.isEmpty()) {
+                findViewById(R.id.titre_list_view).setVisibility(View.VISIBLE);
+                adapterBT.swapItems(lesDevicesBT);
+            }
         }
 
         // Vérification de la présence du Bluetooth.
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
                     buttonRechercheBT.setEnabled(false);
                     buttonRechercheBT.setBackgroundColor(getResources().getColor(R.color.material_gris_300));
                 }else{
+                    activatePopup = true;
                     BluetoothUtils.activationBluetooth(MainActivity.this);
                 }
 
@@ -187,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (resultCode == RESULT_OK) {
             Toast.makeText(getApplicationContext(),"Vous avez activé le Bluetooth", Toast.LENGTH_SHORT).show();
-            BluetoothUtils.abonnementActionFoundAndDiscoveryFinishedBT(getApplicationContext(), bluetoothActionFoundAndFinishReceiver);
+            BluetoothUtils.abonnementActionFoundAndDiscoveryFinishedBT(MainActivity.this, bluetoothActionFoundAndFinishReceiver);
             buttonRechercheBT.setEnabled(true);
         } else {
             Toast.makeText(getApplicationContext(),"Vous devez activer le Bluetooth pour scanner les devices aux alentours.", Toast.LENGTH_SHORT).show();
@@ -211,11 +215,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(bluetoothActionFoundAndFinishReceiver != null){
+        if(bluetoothActionFoundAndFinishReceiver != null && !activatePopup){
             unregisterReceiver(bluetoothActionFoundAndFinishReceiver);
             bluetoothActionFoundAndFinishReceiver = null;
         }
-        if(bluetoothReceiverStateChange != null){
+        if(bluetoothReceiverStateChange != null && !activatePopup){
             unregisterReceiver(bluetoothReceiverStateChange);
             bluetoothReceiverStateChange = null;
         }
