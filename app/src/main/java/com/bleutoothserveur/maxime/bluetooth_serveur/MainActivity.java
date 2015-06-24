@@ -34,15 +34,17 @@ import com.bleutoothserveur.maxime.bluetooth_serveur.utils.InternetUtils;
 
 public class MainActivity extends AppCompatActivity {
 
+    public List<BluetoothDevice> lesDevicesBT;
     private BluetoothAdapter bluetoothAdapter;
-    private List<BluetoothDevice> lesDevicesBT;
     private Button buttonRechercheBT;
     private AdapterItemBT adapterBT;
     private BroadcastReceiver bluetoothActionFoundAndFinishReceiver;
     private BroadcastReceiver bluetoothReceiverStateChange;
+    private boolean actif = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Button buttonSendData = (Button)findViewById(R.id.send_data);
@@ -59,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
         bluetoothReceiverStateChange = new BTReceiverStateChange();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(Constantes.KEY_SAVEINSTANCE_LISTE_BT)) {
+            findViewById(R.id.titre_list_view).setVisibility(View.VISIBLE);
             lesDevicesBT = savedInstanceState.getParcelableArrayList(Constantes.KEY_SAVEINSTANCE_LISTE_BT);
-            listViewDevicesBT.setVisibility(View.VISIBLE);
-            adapterBT.notifyDataSetChanged();
+            adapterBT.swapItems(lesDevicesBT);
         }
 
         // Vérification de la présence du Bluetooth.
@@ -71,8 +73,9 @@ public class MainActivity extends AppCompatActivity {
             switchActivationBT.setChecked(false);
             stateBluetooth.setText(Constantes.LIBELLE_BT_INEXISTANT);
         }else{
+            actif = true;
             BluetoothUtils.abonnementActivationDesactivationBT(MainActivity.this, bluetoothReceiverStateChange);
-            BluetoothUtils.abonnementActionFoundAndDiscoveryFinishedBT(MainActivity.this,bluetoothActionFoundAndFinishReceiver);
+            BluetoothUtils.abonnementActionFoundAndDiscoveryFinishedBT(MainActivity.this, bluetoothActionFoundAndFinishReceiver);
             if (!bluetoothAdapter.isEnabled()) {
                 stateBluetooth.setText(Constantes.LIBELLE_BT_DESACTIVE);
                 buttonRechercheBT.setBackgroundColor(getResources().getColor(R.color.material_gris_300));
@@ -94,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     buttonRechercheBT.setEnabled(false);
                     buttonRechercheBT.setBackgroundColor(getResources().getColor(R.color.material_gris_300));
                 }else{
-                    BluetoothUtils.activationBluetooth(getApplicationContext());
+                    BluetoothUtils.activationBluetooth(MainActivity.this);
                 }
 
             }
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView dialogAdress = (TextView) dialog.findViewById(R.id.adress_value_dialog_item);
                 TextView dialogBonded = (TextView) dialog.findViewById(R.id.bonded_value_dialog_item);
                 TextView dialogType = (TextView) dialog.findViewById(R.id.type_value_dialog_item);
-                BluetoothDevice device = getLesDevicesBT().get(position);
+                BluetoothDevice device = lesDevicesBT.get(position);
 
                 if(device != null){
                     if(device.getName() == null){
@@ -161,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -204,6 +208,30 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(bluetoothActionFoundAndFinishReceiver != null){
+            unregisterReceiver(bluetoothActionFoundAndFinishReceiver);
+            bluetoothActionFoundAndFinishReceiver = null;
+        }
+        if(bluetoothReceiverStateChange != null){
+            unregisterReceiver(bluetoothReceiverStateChange);
+            bluetoothReceiverStateChange = null;
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(bluetoothActionFoundAndFinishReceiver == null && actif){
+            BluetoothUtils.abonnementActionFoundAndDiscoveryFinishedBT(MainActivity.this,bluetoothActionFoundAndFinishReceiver);
+        }
+        if(bluetoothReceiverStateChange == null && actif){
+            BluetoothUtils.abonnementActivationDesactivationBT(MainActivity.this,bluetoothReceiverStateChange);
+        }
+    }
+
     /**
      * Méthode de création du menu.
      * @param menu Le menu
@@ -242,12 +270,5 @@ public class MainActivity extends AppCompatActivity {
          adapterBT.notifyDataSetChanged();
     }
 
-    /**
-     * Getters sur la liste des devices.
-     * @return La liste des devices Bluetooth.
-     */
-    public List<BluetoothDevice> getLesDevicesBT(){
-        return lesDevicesBT;
-    }
 
 }

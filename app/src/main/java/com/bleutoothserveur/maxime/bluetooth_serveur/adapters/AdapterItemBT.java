@@ -47,6 +47,20 @@ public class AdapterItemBT extends BaseAdapter {
         TextView adresse_bt;
     }
 
+    public void swapItems(List<BluetoothDevice> items) {
+        this.listDevicesBT = items;
+        notifyDataSetChanged();
+    }
+
+    /**
+     * Mise à jour de la liste des appareils Bluetooth détectés.
+     * @param device L'appareil Bluetooth détecté à afficher.
+     */
+    public void updateListView(BluetoothDevice device){
+        this.listDevicesBT.add(device);
+        notifyDataSetChanged();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

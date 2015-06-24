@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bleutoothserveur.maxime.bluetooth_serveur.MainActivity;
 import com.bleutoothserveur.maxime.bluetooth_serveur.R;
+import com.bleutoothserveur.maxime.bluetooth_serveur.adapters.AdapterItemBT;
 
 /**
  * BroadcastReceiver surveillant la détection d'un nouvel appareil Bluetooth.
@@ -37,7 +38,7 @@ public class BTActionFoundAndFinishReceiver extends BroadcastReceiver {
             buttonRechercheBT.setBackground(context.getResources().getDrawable(R.drawable.primary_round));
             buttonRechercheBT.setEnabled(true);
             progressRecherche.setVisibility(View.GONE);
-            if(activity.getLesDevicesBT().isEmpty()){
+            if(activity.lesDevicesBT.isEmpty()){
                 titreAucunFound.setVisibility(View.VISIBLE);
             }
         }else if(BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)){

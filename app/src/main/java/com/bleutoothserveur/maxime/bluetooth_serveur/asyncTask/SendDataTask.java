@@ -98,7 +98,7 @@ public class SendDataTask extends AsyncTask<View, Integer, Boolean> {
      */
     private boolean send(View v) {
 
-        List<BluetoothDevice> list = activity.getLesDevicesBT();
+        List<BluetoothDevice> list = activity.lesDevicesBT;
 
         // Verification que la liste n'est pas vide.
         if (list.size()>0) {
