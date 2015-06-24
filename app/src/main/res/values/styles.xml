@@ -13,6 +13,7 @@
         <item name="android:minHeight">36dp</item>
         <item name="android:layout_margin">3dp</item>
         <item name="android:color">@color/material_deep_teal_200</item>
+        <item name="android:background">@drawable/primary_round</item>
     </style>
 
 
