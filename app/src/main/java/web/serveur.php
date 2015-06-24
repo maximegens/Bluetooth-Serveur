@@ -5,7 +5,7 @@
 			if($key == 'date'){
 				$contenu.='<h3>Données recues le '.utf8_encode($value).'</h3>';
 			}else if($key == 'adressMac'){
-				$contenu.='<h4>Depuis l\'appareil éméteur : '.utf8_encode($value).'</h4>';
+				$contenu.='<h4>Depuis l\'appareil émetteur : '.utf8_encode($value).'</h4>';
 			}else if(empty($value) && $key == 'nom'.$compteur){
 				$contenu.="<span style='font-weight: bold;'>Inconnu</span><br/>";
 			}else if(empty($value)){

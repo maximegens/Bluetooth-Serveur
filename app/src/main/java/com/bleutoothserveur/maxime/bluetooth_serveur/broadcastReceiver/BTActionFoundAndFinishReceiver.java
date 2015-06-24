@@ -35,7 +35,9 @@ public class BTActionFoundAndFinishReceiver extends BroadcastReceiver {
         }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)){
             progressRecherche.setVisibility(View.VISIBLE);
             buttonRechercheBT.setText(context.getResources().getString(R.string.lancer_la_recherche));
-            buttonRechercheBT.setBackground(context.getResources().getDrawable(R.drawable.primary_round));
+            if(android.os.Build.VERSION.SDK_INT >= 21) {
+                buttonRechercheBT.setBackground(context.getResources().getDrawable(R.drawable.primary_round));
+            }
             buttonRechercheBT.setEnabled(true);
             progressRecherche.setVisibility(View.GONE);
             if(activity.lesDevicesBT.isEmpty()){

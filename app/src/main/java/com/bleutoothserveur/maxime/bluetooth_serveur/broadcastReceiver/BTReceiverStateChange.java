@@ -55,7 +55,9 @@ public class BTReceiverStateChange extends BroadcastReceiver {
                     buttonRechercheBT.setEnabled(true);
                     switchActivationBT.setChecked(true);
                     switchActivationBT.setEnabled(true);
-                    buttonRechercheBT.setBackground(context.getResources().getDrawable(R.drawable.primary_round));
+                    if(android.os.Build.VERSION.SDK_INT >= 21) {
+                        buttonRechercheBT.setBackground(context.getResources().getDrawable(R.drawable.primary_round));
+                    }
                     break;
             }
         }

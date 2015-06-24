@@ -1,10 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
     <item
         android:id="@+id/webpage_serveur"
         android:title="@string/webpage_serveur"
-        android:icon="@drawable/ic_action_new_map_white"
+        android:icon="@mipmap/ic_action_new_map_white"
         android:orderInCategory="100"
         app:showAsAction="ifRoom" />
 
