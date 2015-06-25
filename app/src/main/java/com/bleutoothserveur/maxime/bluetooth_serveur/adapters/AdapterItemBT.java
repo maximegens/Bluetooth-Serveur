@@ -61,6 +61,13 @@ public class AdapterItemBT extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    /**
+     * Création de la vue.
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

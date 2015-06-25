@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private BroadcastReceiver bluetoothActionFoundAndFinishReceiver;
     private BroadcastReceiver bluetoothReceiverStateChange;
     private boolean actif = false;
-    private boolean activatePopup = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                     buttonRechercheBT.setEnabled(false);
                     buttonRechercheBT.setBackgroundColor(getResources().getColor(R.color.material_gris_300));
                 }else{
-                    activatePopup = true;
                     BluetoothUtils.activationBluetooth(MainActivity.this);
                 }
 
@@ -170,6 +168,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Sauvegarde des données de l'écran lors d'un changement de cycle Android.
+     * @param outState Le bundle dans lequel stocker les valeurs.
+     */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(Constantes.KEY_SAVEINSTANCE_LISTE_BT, (ArrayList<? extends Parcelable>) lesDevicesBT);
@@ -251,7 +253,6 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     /**
      * Mise à jour de la liste des appareils Bluetooth détectés.
      * @param device L'appareil Bluetooth détecté à afficher.
@@ -260,6 +261,4 @@ public class MainActivity extends AppCompatActivity {
          lesDevicesBT.add(device);
          adapterBT.notifyDataSetChanged();
     }
-
-
 }

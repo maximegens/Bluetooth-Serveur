@@ -27,8 +27,8 @@ public class BTActionFoundAndFinishReceiver extends BroadcastReceiver {
         TextView titreAppareilFound = (TextView) activity.findViewById(R.id.titre_list_view);
         TextView titreAucunFound = (TextView) activity.findViewById(R.id.titre_aucun_device);
         ProgressBar progressRecherche = (ProgressBar) activity.findViewById(R.id.progress_recherche);
-
         Button buttonRechercheBT = (Button) activity.findViewById(R.id.button_rechercheBT);
+
         if (BluetoothDevice.ACTION_FOUND.equals(action)) {
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             activity.updateListView(device);

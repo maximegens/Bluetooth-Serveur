@@ -1,5 +1,8 @@
 package com.bleutoothserveur.maxime.bluetooth_serveur.utils;
 
+/**
+ * Constantes de l'application.
+ */
 public class Constantes {
 
     public final static int REQUEST_ENABLE_BT = 0;
